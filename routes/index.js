@@ -1,25 +1,58 @@
 var express = require('express');
 var router = express.Router();
 var request = require('request');
+var j = request.jar();
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    beginLearn();
+    request.get({url:'http://yuhang.learning.gov.cn/study/login.php',jar:j},function(error,response,body){
+        if (!error && response.statusCode == 200) {
+            console.log('STATUS: ' + response.statusCode);
+            console.log('HEADERS: ' + JSON.stringify(response.headers));
+            beginLearn();
+        }
+    });
+
   res.render('index', { title: 'Express' });
 });
 function beginLearn() {
     //login
     console.log("try login!");
-    request.post('http://yuhang.learning.gov.cn/system/login.php', {form: {username: '330106198412035215', passwd: 'flychj123', loginType: '1'}},
-        function (error,response,body) {
-            console.log(body);
-            console.log("try get list!");
+    request("", {
+            method: 'GET', har: {
+                url: 'http://yuhang.learning.gov.cn/study/login.php',
+                method: 'POST',
+                postData: {
+                    mimeType: 'application/x-www-form-urlencoded',
+                    params: [
+                        {
+                            name: 'username',
+                            value: '330106198412035215'
+                        },
+                        {
+                            name: 'password',
+                            value: 'flychj123'
+                        }
+                    ]
+                }
+            }
+        },
+        function (cerror,cresponse,cbody) {
+            console.log("erroe:"+cerror);
+            if (!cerror ) {
+                console.log('1STATUS: ' + cresponse.statusCode);
+                console.log('2HEADERS: ' + JSON.stringify(cresponse.headers));
+                console.log('3BODY: ' + cbody);
+            }
             //getlist
-            request.get('http://yuhang.learning.gov.cn/study/index.php?act=studycourselist',
+            request.get({url:'http://yuhang.learning.gov.cn/study/index.php?act=studycourselist',jar:j},
                 function (oerror,oresponse,obody) {
                     var bodyString =oresponse.body.innerHTML;
+                    console.log("try2");
                     console.log(bodyString);
+                    console.log(obody);
+                    return ;
                     //分析body，获取CourseId
-                    var FirstCourseId = bodyString.substring(bodyString.indexOf("act=detail&courseid=\"") + 21, 10);
+                    var FirstCourseId = obody.sub(bodyString.indexOf("act=detail&courseid=\"") + 21, 10);
                     //getLogId
                     console.log("try get logid!");
                     request.post('http://yuhang.learning.gov.cn/study/ajax.php', {
