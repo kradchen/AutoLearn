@@ -110,7 +110,7 @@ autoLearnObj.getALObj =
                     var bodyObj = JSON.parse(body);
                     //完成
                     if (bodyObj.err == '1') {
-                        UpdateCourseLogId();
+                        alObj.UpdateCourseLogId();
                     }
                     //未完成
                     if (bodyObj.err == '0') {
