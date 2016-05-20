@@ -5,7 +5,22 @@
     <link rel='stylesheet' href='/stylesheets/style.css' />
   </head>
   <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
+  <h1>当前正在自主学习的证号：</h1>
+<% if (loginUser.length) {%>
+<ul>
+  <% loginUser.forEach(function(name){ %>
+  <li ><%= name %></li>
+  <% }) %>
+</ul>
+<% } %>
+<form  action="/" method="post" >
+  <label >身份证号：</label>
+  <input type="text" id="pwd" name="userID" class="form-control" placeholder="身份证号" required autofocus>
+  <label >密码：</label>
+  <input type="password" id="pwd" name="pwd" class="form-control" placeholder="密码" required>
+  <input type="text" id="authKey" name="authKey" placeholder="验证码" required >
+  <img style="vertical-align: middle;" height="23" width="80" id="authKeyImag" onclick="this.src='/images/tempimg.png'"  alt="点击更换验证码" >
+  <button type="submit">登录</button>
+</form>
   </body>
 </html>

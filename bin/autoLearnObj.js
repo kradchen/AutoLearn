@@ -1,59 +1,61 @@
 /**
  * Created by Administrator on 2016/2/25.
  */
+var request = require('request');
+var fs = require('fs');
 var autoLearnObj ={};
 autoLearnObj.getALObj =
-    function getALObj (userName, passWord) {
+    function getALObj (userName, passWord,authKey) {
         var alObj = {};
         alObj.userName = userName;
         alObj.passWord = passWord;
-        alObj.request = require('request');
-        alObj.j = alObj.request.jar();
-        alObj.beginLearn = function () {
+        alObj.authKey = authKey;
+        alObj.request = request;
+        alObj.j = global.cookiesJar;
 
-            alObj.request.get({
-                uri: 'http://yuhang.learning.gov.cn/study/login.php',
-                jar: alObj.j
-            }, function (error, response, body) {
-                if (!error && response.statusCode == 200) {
-                    console.log('STATUS: ' + response.statusCode);
-                    console.log('HEADERS: ' + JSON.stringify(response.headers));
-                    //login
-                    console.log(alObj.userName +" try login!");
-                    alObj.request({
-                            uri: 'http://yuhang.learning.gov.cn/study/login.php', har: {
-                                url: 'http://yuhang.learning.gov.cn/study/login.php',
-                                method: 'POST',
-                                headers: [
-                                    {
-                                        name: 'content-type',
-                                        value: 'application/x-www-form-urlencoded'
-                                    }
-                                ],
-                                postData: {
-                                    mimeType: 'application/x-www-form-urlencoded',
-                                    params: [
-                                        {
-                                            name: 'username',
-                                            value:alObj.userName
-                                        },
-                                        {
-                                            name: 'password',
-                                            value: alObj.passWord
-                                        }
-                                    ]
-                                }
-                            }, jar:  alObj.j
-                        },
-                        function (cerror, cresponse, cbody) {
-                            if (!cerror) {
-                                console.log('1STATUS: ' + cresponse.statusCode);
-                                console.log('2HEADERS: ' + JSON.stringify(cresponse.headers));
-                                alObj.UpdateCourseLogId();
+        alObj.beginLearn = function () {
+            console.log('beginLearn');
+            alObj.request({
+                    uri: 'http://yuhang.learning.gov.cn/study/login.php', har: {
+                        url: 'http://yuhang.learning.gov.cn/study/login.php',
+                        method: 'POST',
+                        headers: [
+                            {
+                                name: 'content-type',
+                                value: 'application/x-www-form-urlencoded'
                             }
-                        });
-                }
-            });
+                        ],
+                        postData: {
+                            mimeType: 'application/x-www-form-urlencoded',
+                            params: [
+                                {
+                                    name: 'username',
+                                    value: alObj.userName
+                                },
+                                {
+                                    name: 'password',
+                                    value: alObj.passWord
+                                },
+                                {
+                                    name: "authKey",
+                                    value: alObj.authKey
+                                }
+                            ]
+                        }
+                    }, jar: alObj.j
+                },
+                function (cerror, cresponse, cbody) {
+                    console.log('beginLearn end');
+                    if (!cerror) {
+                        console.log('1STATUS: ' + cresponse.statusCode);
+                        console.log('2HEADERS: ' + JSON.stringify(cresponse.headers));
+                        alObj.UpdateCourseLogId();
+                    }
+                    else{
+                        console.log('error: ' +error);
+                    }
+                });
+
         };
         alObj.UpdateCourseLogId = function UpdateCourseLogId() {
             //getlist
@@ -122,6 +124,32 @@ autoLearnObj.getALObj =
         };
         return alObj;
     };
+autoLearnObj.refreshCookies=function() {
+    global.fileUpdateFlag=0;
+    console.log('Refresh Cookies begin!');
+    global.cookiesJar=request.jar();
+    request.get({
+        uri: 'http://yuhang.learning.gov.cn/study/login.php',
+        jar: global.cookiesJar
+    }, function (error, response, body) {
+        console.log('Refresh Cookies end!');
+        if (!error && response.statusCode == 200) {
+            console.log('STATUS: ' + response.statusCode);
+            console.log('HEADERS: ' + JSON.stringify(response.headers));
+            console.log('cookies: '+global.cookiesJar.getCookieString('http://yuhang.learning.gov.cn'));
+        }
+        else{
+            console.log('error: ' +error);
 
+        }
+
+        downloadImg('http://www.learning.gov.cn/system/akey_img.php?'+Math.random(),'tempimg.png',function(){console.log('pipedone!');global.fileUpdateFlag=1;});
+    });
+};
+var downloadImg = function(uri, filename, callback){
+
+        request.get({uri:uri,jar: global.cookiesJar}).pipe(fs.createWriteStream('public/images/'+filename)).on('close', callback);  //调用request的管道来下载到 images文件夹下
+
+};
 module.exports =  require('../bin/autoLearnObj');
 module.exports = autoLearnObj;
