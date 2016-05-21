@@ -15,8 +15,8 @@ router.post('/', function(req, res, next) {
     var alobj = autoLearnObj.getALObj(req.body.userID,req.body.pwd,req.body.authKey);
 
     alobj.beginLearn();
-    alObjectList.push(req.body.userID);
-    res.render('index', { title: 'Home',loginUser:alObjectList });
+    //alObjectList.push(req.body.userID);
+    res.render('index', { title: 'Home',loginUser:'' });
 });
 
 module.exports = router;
