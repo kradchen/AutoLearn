@@ -1,5 +1,6 @@
 FROM ubuntu:trusty
 MAINTAINER KradChen <reinhard1203@163.com>
+RUN ls -a
 RUN sudo cp /etc/apt/sources.list /etc/apt/sources.list_backup
 RUN sudo rm /etc/apt/sources.list -f 
 RUN sudo cp /src/sources.list /etc/apt/sources.list
