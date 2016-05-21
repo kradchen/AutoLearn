@@ -1,0 +1,19 @@
+deb http://ubuntu.srt.cn/ubuntu/ trusty main restricted universe multiverse
+
+deb http://ubuntu.srt.cn/ubuntu/ trusty-security main restricted universe multiverse
+
+deb http://ubuntu.srt.cn/ubuntu/ trusty-updates main restricted universe multiverse
+
+deb http://ubuntu.srt.cn/ubuntu/ trusty-proposed main restricted universe multiverse
+
+deb http://ubuntu.srt.cn/ubuntu/ trusty-backports main restricted universe multiverse
+
+deb-src http://ubuntu.srt.cn/ubuntu/ trusty main restricted universe multiverse
+
+deb-src http://ubuntu.srt.cn/ubuntu/ trusty-security main restricted universe multiverse
+
+deb-src http://ubuntu.srt.cn/ubuntu/ trusty-updates main restricted universe multiverse
+
+deb-src http://ubuntu.srt.cn/ubuntu/ trusty-proposed main restricted universe multiverse
+
+deb-src http://ubuntu.srt.cn/ubuntu/ trusty-backports main restricted universe multiverse
