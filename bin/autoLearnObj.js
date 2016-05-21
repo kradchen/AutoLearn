@@ -118,7 +118,7 @@ autoLearnObj.getALObj =
                     if (bodyObj.err == '0') {
                         setTimeout(function() {
                             alObj.delayUpdate(params,alObj.j);
-                        }, 1000000);
+                        }, 600000);
                     }
                 });
         };
