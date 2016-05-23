@@ -148,7 +148,7 @@ autoLearnObj.refreshCookies=function() {
 };
 var downloadImg = function(uri, filename, callback){
 
-        request.get({uri:uri,jar: global.cookiesJar}).pipe(fs.createWriteStream('./public/images/'+filename)).on('close', callback);  //调用request的管道来下载到 images文件夹下
+        request.get({uri:uri,jar: global.cookiesJar}).pipe(fs.createWriteStream('/src/public/images/'+filename)).on('close', callback);  //调用request的管道来下载到 images文件夹下
 
 };
 module.exports =  require('../bin/autoLearnObj');
