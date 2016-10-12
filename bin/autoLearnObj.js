@@ -47,8 +47,8 @@ autoLearnObj.getALObj =
                 function (cerror, cresponse, cbody) {
                     console.log('beginLearn end');
                     if (!cerror) {
-                        console.log('1STATUS: ' + cresponse.statusCode);
-                        console.log('2HEADERS: ' + JSON.stringify(cresponse.headers));
+                        //console.log('1STATUS: ' + cresponse.statusCode);
+                        //console.log('2HEADERS: ' + JSON.stringify(cresponse.headers));
                         alObj.UpdateCourseLogId();
                     }
                     else{
@@ -61,7 +61,7 @@ autoLearnObj.getALObj =
             //getlist
             alObj.request.get({url: 'http://yuhang.learning.gov.cn/study/index.php?act=studycourselist', jar: alObj.j},
                 function (oerror, oresponse, obody) {
-                    console.log(obody);
+                    //console.log(obody);
                     if(obody.indexOf("act=detail&courseid=")!=0) {
                         //分析body，获取CourseId
                         var FirstCourseId = obody.substr(obody.indexOf("act=detail&courseid=") + 20, 10);
@@ -73,11 +73,11 @@ autoLearnObj.getALObj =
                         }, {name: 'delay', value: '1200000'}];
                         alObj.AjaxCommunicate(sessionParams, function (ierror, iresponse, body) {
                             console.log("error:" + ierror);
-                            console.log("body:" + body);
+                            //console.log("body:" + body);
                             var logParams = [{name: 'act', value: 'insert'}, {name: 'courseId', value: FirstCourseId}];
                             alObj.AjaxCommunicate(logParams, function (lerror, lresponse, lbody) {
                                 console.log("error:" + lerror);
-                                console.log("body:" + lbody);
+                                //console.log("body:" + lbody);
                                 var logId = JSON.parse(lbody).logId;
                                 console.log("logid:" + logId);
                                 var updateParams = [{name: 'act', value: 'update'},
