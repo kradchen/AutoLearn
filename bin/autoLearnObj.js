@@ -112,13 +112,14 @@ autoLearnObj.getALObj =
                     var bodyObj = JSON.parse(body);
                     //完成
                     if (bodyObj.err == '1') {
+                        console.log(alObj.userName+' Change Course!');
                         alObj.UpdateCourseLogId();
                     }
                     //未完成
                     if (bodyObj.err == '0') {
                         setTimeout(function() {
                             alObj.delayUpdate(params,alObj.j);
-                        }, 600000);
+                        }, 180000);
                     }
                 });
         };
